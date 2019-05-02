@@ -13,5 +13,8 @@ Java_com_phj_player_MainActivity_stringFromJNI(
 
     IDemux *de = new FFDemux();
     de->Open("/sdcard/5.mp4");
+    for(;;) {
+        de->Read();
+    }
     return env->NewStringUTF(hello.c_str());
 }

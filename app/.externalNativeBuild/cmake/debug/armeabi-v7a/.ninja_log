@@ -16,3 +16,6 @@
 9	1151	0	CMakeFiles/native-lib.dir/src/main/cpp/FFDemux.cpp.o	4dd17f6daa86068b
 191	1512	0	CMakeFiles/native-lib.dir/src/main/cpp/native-lib.cpp.o	7e05bda5bc25db13
 1512	2226	0	../../../../build/intermediates/cmake/debug/obj/armeabi-v7a/libnative-lib.so	4e7cbaf366f29ad5
+998	2368	0	CMakeFiles/native-lib.dir/src/main/cpp/FFDemux.cpp.o	4dd17f6daa86068b
+5	2528	0	CMakeFiles/native-lib.dir/src/main/cpp/native-lib.cpp.o	7e05bda5bc25db13
+2528	3559	0	../../../../build/intermediates/cmake/debug/obj/armeabi-v7a/libnative-lib.so	4e7cbaf366f29ad5

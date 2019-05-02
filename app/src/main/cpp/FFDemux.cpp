@@ -40,6 +40,25 @@ bool FFDemux::Open(const char *const url) {
 
 XData FFDemux::Read() {
 
+    if (!ic)
+    {
+        return XData();
+    }
+
+    XData data;
+    AVPacket *packet = av_packet_alloc();
+    int re = av_read_frame(ic,packet);
+    if (re != 0) {
+        // 释放空间
+        av_packet_free(&packet);
+        return XData();
+    }
+
+    // 将数据用XData表示 并存储
+    data.data = (unsigned char *) packet;
+    data.size = packet->size;
+    LOGI("packet size is %d ptts = %lld",packet->size,packet->pts);
+    return data;
 }
 
 
