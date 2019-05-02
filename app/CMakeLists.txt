@@ -37,6 +37,12 @@ add_library( # Sets the name of the library.
 
              # Provides a relative path to your source file(s).
              src/main/cpp/native-lib.cpp
+
+             #解封装的源码
+             src/main/cpp/IDemux.cpp
+             src/main/cpp/FFDemux.cpp
+             src/main/cpp/XData.cpp
+             src/main/cpp/XLog.cpp
              )
 
 # Searches for a specified prebuilt library and stores the path as a
