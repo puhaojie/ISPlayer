@@ -1,2 +1,6 @@
 
-.idea/workspace.xml
+.idea/libraries
+
+build
+*.bin
+*.lock

@@ -13,21 +13,24 @@
 
 
 #include "XData.h"
+#include "XThread.h"
+#include "IObserver.h"
 
-class IDemux {
+class IDemux : public IObserver{
 
 public:
     // 打开相应的流媒体
     virtual bool Open(const char* const url) = 0;
-
-    // 关闭资源
-//    virtual bool Close() = 0;
 
     // 解封装后的一帧数据，内存由调用者清理
     virtual XData Read() = 0;
 
     // 总时长（毫秒级别）
     int totalMs = 0;
+
+protected:
+    // 不让用户访问
+    virtual void Main();
 };
 
 

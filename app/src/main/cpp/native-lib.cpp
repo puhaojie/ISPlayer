@@ -12,9 +12,13 @@ Java_com_phj_player_MainActivity_stringFromJNI(
     std::string hello = "Hello from C++";
 
     IDemux *de = new FFDemux();
+
     de->Open("/sdcard/5.mp4");
-    for(;;) {
-        de->Read();
-    }
+    de->Start();
+    XSleep(3000);
+    de->Stop();
+//    for(;;) {
+//        de->Read();
+//    }
     return env->NewStringUTF(hello.c_str());
 }
