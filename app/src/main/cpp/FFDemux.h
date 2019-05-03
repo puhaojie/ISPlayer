@@ -20,9 +20,22 @@ public:
 
     FFDemux();
 
+    // 获取视频参数
+    virtual XParameter GetVPara();
+
+    // 获取音频参数
+    virtual XParameter GetAPara();
+
 private:
     // 解封装的上下文
     AVFormatContext *ic = 0;
+
+    // todo IObserver中也有 冲突？
+    std::mutex mux;
+
+    // 对应的索引
+    int audioStream = 1;
+    int videoStream = 0;
 };
 
 

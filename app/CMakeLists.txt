@@ -47,6 +47,13 @@ add_library( # Sets the name of the library.
              src/main/cpp/XThread.cpp
              # 观察者
              src/main/cpp/IObserver.cpp
+
+             # 解码模块
+             src/main/cpp/IDecode.cpp
+             src/main/cpp/FFDecode.cpp
+
+             # 解码器参数
+             src/main/cpp/XParameter.cpp
              )
 
 # Searches for a specified prebuilt library and stores the path as a

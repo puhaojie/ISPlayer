@@ -57,7 +57,19 @@ XData FFDemux::Read() {
     // 将数据用XData表示 并存储
     data.data = (unsigned char *) packet;
     data.size = packet->size;
-    LOGI("packet size is %d ptts = %lld",packet->size,packet->pts);
+//    LOGI("packet size is %d ptts = %lld",packet->size,packet->pts);
+
+    // 需要在XData中保存该数据是音频还是视频帧
+    // 解封装时保存  解码的时候使用
+    if (packet->stream_index == audioStream){
+        data.isAudio = true;
+    } else if(packet->stream_index == videoStream){
+        data.isAudio = false;
+    } else {
+        mux.unlock();
+        av_packet_free(&packet);
+        return XData();
+    }
     return data;
 }
 
@@ -76,5 +88,51 @@ FFDemux::FFDemux() {
         avcodec_register_all();
         LOGE("register FFmpeg success");
     }
+}
+
+// 获取视频的解码器参数 AVCodecParameters
+// 只有解封装模块中可以获取 即AVFormatContext上下文
+XParameter FFDemux::GetVPara() {
+    mux.lock();
+    if (!ic){
+        mux.unlock();
+        return XParameter();
+    }
+    // 获取视频流的索引
+    int re = av_find_best_stream(ic, AVMEDIA_TYPE_VIDEO, -1, -1, 0, 0);
+    if (re < 0){
+        mux.unlock();
+        return XParameter();
+    }
+    LOGI("av_find_best_stream  GetVPara XParameter success %d",re);
+    videoStream = re;
+    XParameter para;
+    para.para = ic->streams[re]->codecpar;
+    mux.unlock();
+    return para;
+}
+
+
+// 获取音频的解码器参数 AVCodecParameters
+// 只有解封装模块中可以获取 即AVFormatContext上下文
+XParameter FFDemux::GetAPara() {
+    mux.lock();
+    if (!ic){
+        mux.unlock();
+        return XParameter();
+    }
+    // 获取音频流的索引
+    int re = av_find_best_stream(ic, AVMEDIA_TYPE_AUDIO, -1, -1, 0, 0);
+    if (re < 0){
+        mux.unlock();
+        return XParameter();
+    }
+    audioStream = re;
+    XParameter para;
+    para.para = ic->streams[re]->codecpar;
+    para.sample_rate = ic->streams[re]->codecpar->sample_rate;
+    para.channels = ic->streams[re]->codecpar->channels;
+    mux.unlock();
+    return para;
 }
 

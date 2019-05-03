@@ -1,6 +1,7 @@
 #include <jni.h>
 #include <string>
 #include "FFDemux.h"
+#include "FFDecode.h"
 
 extern "C"
 JNIEXPORT jstring
@@ -12,11 +13,23 @@ Java_com_phj_player_MainActivity_stringFromJNI(
     std::string hello = "Hello from C++";
 
     IDemux *de = new FFDemux();
-
     de->Open("/sdcard/5.mp4");
+
+    IDecode *vdecode = new FFDecode();
+    vdecode->Open(de->GetVPara());
+
+    IDecode *adecode = new FFDecode();
+    adecode->Open(de->GetAPara());
+
+    // 添加观察者
+    de->AddObs(vdecode);
+    de->AddObs(adecode);
+
     de->Start();
-    XSleep(3000);
-    de->Stop();
+    vdecode->Start();
+    adecode->Start();
+//    XSleep(3000);
+//    de->Stop();
 //    for(;;) {
 //        de->Read();
 //    }

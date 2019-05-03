@@ -15,6 +15,9 @@
 #include "XData.h"
 #include "XThread.h"
 #include "IObserver.h"
+#include "XParameter.h"
+
+struct AVFormatContext;
 
 class IDemux : public IObserver{
 
@@ -27,6 +30,12 @@ public:
 
     // 总时长（毫秒级别）
     int totalMs = 0;
+
+    // 获取视频参数
+    virtual XParameter GetVPara() = 0;
+
+    // 获取音频参数
+    virtual XParameter GetAPara() = 0;
 
 protected:
     // 不让用户访问
