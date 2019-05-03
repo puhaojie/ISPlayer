@@ -1,5 +1,6 @@
 //
-// Created by Administrator on 2019/5/2.
+// Created by phj on 2019/5/2.
+//
 //
 
 #ifndef ISPLAYER_XTHREAD_H
@@ -10,7 +11,7 @@ void XSleep(int mis);
 class XThread {
 
 public:
-    // 启动线程
+    // 启动线程（外部进入的方法） 代表线程读取工作的启动
     virtual void Start();
 
     // 安全停止
