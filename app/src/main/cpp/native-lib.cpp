@@ -2,6 +2,10 @@
 #include <string>
 #include "FFDemux.h"
 #include "FFDecode.h"
+#include "XEGL.h"
+
+#include <android/native_window.h>
+#include <android/native_window_jni.h>
 
 extern "C"
 JNIEXPORT jstring
@@ -34,4 +38,16 @@ Java_com_phj_player_MainActivity_stringFromJNI(
 //        de->Read();
 //    }
     return env->NewStringUTF(hello.c_str());
+}
+
+
+// 初始化窗口
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_phj_player_ISPlay_initView(JNIEnv *env, jobject instance, jobject surface) {
+
+    //显示窗口初始化
+    ANativeWindow *nwin = ANativeWindow_fromSurface(env, surface);
+    XEGL::Get()->Init(nwin);
+
 }

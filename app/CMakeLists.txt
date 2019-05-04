@@ -54,6 +54,15 @@ add_library( # Sets the name of the library.
 
              # 解码器参数
              src/main/cpp/XParameter.cpp
+
+             # 视频播放
+             src/main/cpp/IVideoView.cpp
+             src/main/cpp/CXTexture.cpp
+             src/main/cpp/GLVideoView.cpp
+             src/main/cpp/XTexture.cpp
+             src/main/cpp/XShader.cpp
+             src/main/cpp/XEGL.cpp
+
              )
 
 # Searches for a specified prebuilt library and stores the path as a
