@@ -3,6 +3,7 @@
 #include "FFDemux.h"
 #include "FFDecode.h"
 #include "XEGL.h"
+#include "XShader.h"
 
 #include <android/native_window.h>
 #include <android/native_window_jni.h>
@@ -49,5 +50,8 @@ Java_com_phj_player_ISPlay_initView(JNIEnv *env, jobject instance, jobject surfa
     //显示窗口初始化
     ANativeWindow *nwin = ANativeWindow_fromSurface(env, surface);
     XEGL::Get()->Init(nwin);
+    XShader shader;
+
+    shader.Init();
 
 }

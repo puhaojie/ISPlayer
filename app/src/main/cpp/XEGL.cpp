@@ -13,7 +13,7 @@ class CXEGL : public XEGL {
 
 public:
 
-    // 成员变量
+    // 成员变量（保存是为了便于销毁）
     EGLDisplay display = EGL_NO_DISPLAY;
     EGLSurface surface = EGL_NO_SURFACE;
     EGLContext context = EGL_NO_CONTEXT;
@@ -36,8 +36,6 @@ public:
             return false;
         }
 
-        // 3、获取配置，创建surface
-        LOGI("eglInitialize success");
 
         // 3、获取配置 并创建Surface
         EGLint configSpec[] = {
@@ -57,8 +55,7 @@ public:
             return false;
         }
         // 外部的窗口和OpenGL关联
-        surface = eglCreateWindowSurface(display, config, nwin, NULL);
-        LOGI("eglChooseConfig success");
+        surface = eglCreateWindowSurface(display, config, nwin,NULL);
 
         // 4、创建EGL上下文并打开
         const EGLint ctxAttr[] = {EGL_CONTEXT_CLIENT_VERSION, 2, EGL_NONE};
@@ -66,11 +63,10 @@ public:
         if (context == EGL_NO_CONTEXT) {
             return false;
         }
-        LOGI("eglCreateContext success");
         if (EGL_TRUE != eglMakeCurrent(display, surface, surface, context)) {
             return false;
         }
-        LOGI("全部步骤成功 eglMakeCurrent success");
+        LOGI("CXEGL Init success");
         return true;
     }
 
