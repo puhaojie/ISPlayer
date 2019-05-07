@@ -4,13 +4,16 @@
 #include "FFDecode.h"
 #include "XEGL.h"
 #include "XShader.h"
+#include "IVideoView.h"
+#include "GLVideoView.h"
 
 #include <android/native_window.h>
 #include <android/native_window_jni.h>
 
+IVideoView *view;
+
 extern "C"
 JNIEXPORT jstring
-
 JNICALL
 Java_com_phj_player_MainActivity_stringFromJNI(
         JNIEnv *env,
@@ -29,6 +32,9 @@ Java_com_phj_player_MainActivity_stringFromJNI(
     // 添加观察者
     de->AddObs(vdecode);
     de->AddObs(adecode);
+
+    view = new GLVideoView();
+    vdecode->AddObs(view);
 
     de->Start();
     vdecode->Start();
@@ -49,9 +55,6 @@ Java_com_phj_player_ISPlay_initView(JNIEnv *env, jobject instance, jobject surfa
 
     //显示窗口初始化
     ANativeWindow *nwin = ANativeWindow_fromSurface(env, surface);
-    XEGL::Get()->Init(nwin);
-    XShader shader;
-
-    shader.Init();
+    view->SetRender(nwin);
 
 }

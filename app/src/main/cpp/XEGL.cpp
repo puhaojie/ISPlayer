@@ -70,6 +70,13 @@ public:
         return true;
     }
 
+    virtual void Draw() {
+        if(display == EGL_NO_DISPLAY || surface == EGL_NO_SURFACE)
+        {
+            return;
+        }
+        eglSwapBuffers(display,surface);
+    }
 
     virtual void Close() {
 
