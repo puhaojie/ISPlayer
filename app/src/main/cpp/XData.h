@@ -19,6 +19,9 @@ struct XData {
     // 该数据是存储解封装后的数据||解码后的数据
     unsigned char* data = 0;
 
+    // 解码后的数据
+    unsigned char* datas[8] = {0};
+
     int size = 0;
 
     // 清理

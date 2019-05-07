@@ -6,8 +6,22 @@
 #define ISPLAYER_GLVIDEOVIEW_H
 
 
-class GLVideoView {
+#include "XData.h"
+#include "IVideoView.h"
 
+class XTexture;
+
+class GLVideoView : public IVideoView{
+public:
+    // 保存窗口
+    virtual void SetRender(void* win);
+
+    // 绘制每一帧图像
+    virtual void Render(XData data);
+
+protected:
+    void * view = 0; // 窗体
+    XTexture *txt = 0;
 };
 
 

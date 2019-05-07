@@ -6,8 +6,17 @@
 #define ISPLAYER_IVIDEOVIEW_H
 
 
-class IVideoView {
+#include "IObserver.h"
 
+class IVideoView : public IObserver{
+public:
+    // 保存窗口
+    virtual void SetRender(void* win) = 0;
+
+    // 绘制每一帧图像
+    virtual void Render(XData data) = 0;
+
+    virtual void Update(XData data);
 };
 
 

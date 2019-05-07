@@ -109,5 +109,8 @@ XData FFDecode::RecvFrame() {
     } else {
         d.size = av_get_bytes_per_sample((AVSampleFormat) frame->format) * frame->nb_samples * 2; //样本字节数*单通道样本数*通道数
     }
+
+    // 拷贝解码后的数据
+    memcpy(d.datas,frame->data, sizeof(d.datas));
     return d;
 }
