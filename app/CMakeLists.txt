@@ -63,6 +63,10 @@ add_library( # Sets the name of the library.
              src/main/cpp/XShader.cpp
              src/main/cpp/XEGL.cpp
 
+             # 音频重采样部分
+             src/main/cpp/IResample.cpp
+             src/main/cpp/FFResample.cpp
+
              )
 
 # Searches for a specified prebuilt library and stores the path as a
