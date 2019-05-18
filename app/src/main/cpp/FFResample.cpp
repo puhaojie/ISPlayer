@@ -70,5 +70,5 @@ XData FFResample::Resample(XData indata) {
     }
     out.pts = indata.pts;
     LOGE("swr_convert success = %d",len);
-    return XData();
+    return out;
 }

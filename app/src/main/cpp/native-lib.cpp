@@ -8,6 +8,8 @@
 #include "GLVideoView.h"
 #include "IResample.h"
 #include "FFResample.h"
+#include "IAudioPlay.h"
+#include "SLAudioPlay.h"
 
 #include <android/native_window.h>
 #include <android/native_window_jni.h>
@@ -43,6 +45,10 @@ Java_com_phj_player_MainActivity_stringFromJNI(
     IResample *resample = new FFResample();
     resample->Open(de->GetAPara());
     adecode->AddObs(resample);
+
+    IAudioPlay *audioPlay = new SLAudioPlay();
+    resample->AddObs(audioPlay);
+    audioPlay->StartPlay(de->GetAPara());
 
     de->Start();
     vdecode->Start();
