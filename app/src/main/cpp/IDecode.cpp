@@ -26,7 +26,7 @@ void IDecode::Main() {
                 XData frame = RecvFrame();
                 if (!frame.data) //读不到数据的时候 返回
                     break;
-                LOGE(" 大小 %d",frame.size);
+//                LOGE(" 大小 %d",frame.size);
                 this->Notify(frame);
             }
         }

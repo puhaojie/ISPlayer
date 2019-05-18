@@ -25,7 +25,9 @@ public:
 
     // 解码后数据更新后的通知
     virtual void Update(XData data);
+    // 通道数
     int outChannels = 2;
+    // 样本大小
     int outFormat = 1;
 };
 

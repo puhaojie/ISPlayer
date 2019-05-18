@@ -1,15 +1,15 @@
-Executable : D:\environment\androidsdk\cmake\3.6.4111459\bin\cmake.exe
+Executable : D:\Android\sdk\cmake\3.6.4111459\bin\cmake.exe
 arguments : 
--HD:\project\used\ffmpeg\ISPlayer\app
--BD:\project\used\ffmpeg\ISPlayer\app\.externalNativeBuild\cmake\release\armeabi-v7a
+-HD:\F\project\self\github\android\ISPlayer\app
+-BD:\F\project\self\github\android\ISPlayer\app\.externalNativeBuild\cmake\release\armeabi-v7a
 -DANDROID_ABI=armeabi-v7a
 -DANDROID_PLATFORM=android-19
--DCMAKE_LIBRARY_OUTPUT_DIRECTORY=D:\project\used\ffmpeg\ISPlayer\app\build\intermediates\cmake\release\obj\armeabi-v7a
+-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=D:\F\project\self\github\android\ISPlayer\app\build\intermediates\cmake\release\obj\armeabi-v7a
 -DCMAKE_BUILD_TYPE=Release
--DANDROID_NDK=D:\environment\androidsdk\ndk-bundle
+-DANDROID_NDK=D:\Android\sdk\ndk-bundle
 -DCMAKE_CXX_FLAGS=-std=c++11
--DCMAKE_TOOLCHAIN_FILE=D:\environment\androidsdk\ndk-bundle\build\cmake\android.toolchain.cmake
--DCMAKE_MAKE_PROGRAM=D:\environment\androidsdk\cmake\3.6.4111459\bin\ninja.exe
+-DCMAKE_TOOLCHAIN_FILE=D:\Android\sdk\ndk-bundle\build\cmake\android.toolchain.cmake
+-DCMAKE_MAKE_PROGRAM=D:\Android\sdk\cmake\3.6.4111459\bin\ninja.exe
 -GAndroid Gradle - Ninja
 jvmArgs : 
 

@@ -6,6 +6,8 @@
 #include "XShader.h"
 #include "IVideoView.h"
 #include "GLVideoView.h"
+#include "IResample.h"
+#include "FFResample.h"
 
 #include <android/native_window.h>
 #include <android/native_window_jni.h>
@@ -33,8 +35,14 @@ Java_com_phj_player_MainActivity_stringFromJNI(
     de->AddObs(vdecode);
     de->AddObs(adecode);
 
+    // 视频转换  并播放
     view = new GLVideoView();
     vdecode->AddObs(view);
+
+    // 音频的重采样  并播放
+    IResample *resample = new FFResample();
+    resample->Open(de->GetAPara());
+    adecode->AddObs(resample);
 
     de->Start();
     vdecode->Start();

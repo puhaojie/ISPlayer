@@ -41,5 +41,34 @@ bool FFResample::Open(XParameter in, XParameter out) {
 
 // 重采样
 XData FFResample::Resample(XData indata) {
+    // 1、判断indata参数
+    if (indata.size <= 0 || !indata.data) {
+        return XData();
+    }
+    if (!actx) {
+        return XData();
+    }
+    AVFrame *frame = (AVFrame *)indata.data;
+    // 2、分配copy内存
+    XData out;
+    // 计算音频大小
+    // size = 通道 * 单通道样本数 * 每个样本大小
+    int outsize = outChannels * frame->nb_samples * av_get_bytes_per_sample((AVSampleFormat)outFormat);
+    if (outsize <= 0) {
+        return XData();
+    }
+    out.Allow(outsize);
+
+    // 定义输出的数组
+    uint8_t *outArr[2] = {0};
+    outArr[0] = out.data;
+    // 开始转换
+    // 重采样后的数据存放到 out.data
+    int len = swr_convert(actx, outArr, frame->nb_samples, (const uint8_t **) frame->data, frame->nb_samples);
+    if (len <= 0) {
+        out.Drop();
+    }
+    out.pts = indata.pts;
+    LOGE("swr_convert success = %d",len);
     return XData();
 }

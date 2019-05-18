@@ -18,10 +18,31 @@ void XData::Drop() {
     if (type == AVPACKET_TYPE)
     {
         av_packet_free((AVPacket **) &data);
-    } else {
+    } else
+    {
         delete data;
     }
 
     data = 0;
     size = 0;
+}
+
+
+// 分配一定的内存空间
+bool XData::Allow(int size, const char *d) {
+    Drop();
+    type = UCHAR_TYPE;
+    if (size<=0)
+        return false;
+    this->data = new unsigned char[size];
+
+    if (!this->data)
+        return false;
+
+    // 分配成功再copy
+    if (d) {
+        memcpy(this->data,d,size);
+    }
+    this->size = size;
+    return true;
 }

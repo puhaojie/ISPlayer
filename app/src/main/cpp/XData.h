@@ -15,10 +15,11 @@ enum XDataType // 涉及到释放内存的问题
 struct XData {
 
     // 清理的问题，关于哪一种类型，是否是FFmpeg
+    // 为了隔离具体的视频播放引擎
     int type = 0;
     // 该数据是存储解封装后的数据||解码后的数据
     unsigned char* data = 0;
-
+    int pts = 0;
     // 解码后的数据
     unsigned char* datas[8] = {0};
 
@@ -27,6 +28,8 @@ struct XData {
     // 清理
     void Drop();
 
+    // 分配并拷贝内存空间
+    bool Allow(int size, const char* data = 0);
     // 视频的宽和高
     int width;
     int height;
