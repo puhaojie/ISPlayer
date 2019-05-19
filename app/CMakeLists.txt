@@ -57,7 +57,6 @@ add_library( # Sets the name of the library.
 
              # 视频播放
              src/main/cpp/IVideoView.cpp
-             src/main/cpp/CXTexture.cpp
              src/main/cpp/GLVideoView.cpp
              src/main/cpp/XTexture.cpp
              src/main/cpp/XShader.cpp

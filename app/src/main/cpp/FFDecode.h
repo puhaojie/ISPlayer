@@ -14,8 +14,13 @@ struct AVFrame;
 
 class FFDecode : public IDecode {
 public:
+
+
+    // 传递javaVM 初始化硬解码
+    static void InitHard(void *vm);
+
     // 打开解码器
-    virtual bool Open(XParameter parameter);
+    virtual bool Open(XParameter parameter,bool isHard);
 
     // 将观察者update过来的数据，进行入队。
     // 出队的main中 作为消费 此为消费方法

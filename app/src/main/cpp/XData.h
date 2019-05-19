@@ -22,7 +22,7 @@ struct XData {
     int pts = 0;
     // 解码后的数据
     unsigned char* datas[8] = {0};
-
+    // 数据大小
     int size = 0;
 
     // 清理
@@ -34,6 +34,9 @@ struct XData {
     int width;
     int height;
     bool isAudio = false; // 是否是音频流
+
+    // 视频硬解码或者软解码，解码后的格式不同（显示的时候需要知道）
+    int format = 0;
 };
 
 

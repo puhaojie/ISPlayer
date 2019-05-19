@@ -16,8 +16,11 @@ using namespace std;
 class IDecode : public IObserver{
 
 public:
+
+
     // 打开解码器
-    virtual bool Open(XParameter parameter) = 0;
+    // 默认是非软解码
+    virtual bool Open(XParameter parameter,bool isHard = false) = 0;
 
     // 将观察者update过来的数据，进行入队。
     // 出队的main中 作为消费 此为消费方法

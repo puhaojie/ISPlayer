@@ -9,7 +9,12 @@ extern "C" {
 #include "FFDecode.h"
 #include "XLog.h"
 
-bool FFDecode::Open(XParameter para) {
+
+void FFDecode::InitHard(void *vm) {
+    av_jni_set_java_vm(vm,0);
+}
+
+bool FFDecode::Open(XParameter para, bool isHard) {
 
     if (!para.para) return false;
     AVCodecParameters *p = para.para;
@@ -18,7 +23,7 @@ bool FFDecode::Open(XParameter para) {
     AVCodec *cd = NULL;
 
     LOGI("avcodec_find_decoder %d success", p->codec_id);
-    if (false){
+    if (isHard){
         cd = avcodec_find_decoder_by_name("h264_mediacodec");
         if (!cd) {
             cd = avcodec_find_decoder(p->codec_id);
@@ -55,6 +60,7 @@ bool FFDecode::Open(XParameter para) {
     } else if (codec->codec_type == AVMEDIA_TYPE_AUDIO){
         isAudio = true;
     }
+
 //    LOGI("avcodec_open2  success；isAudio = %d",isAudio);
     mux.unlock();
 
@@ -108,6 +114,11 @@ XData FFDecode::RecvFrame() {
         d.height = frame ->height;
     } else {
         d.size = av_get_bytes_per_sample((AVSampleFormat) frame->format) * frame->nb_samples * 2; //样本字节数*单通道样本数*通道数
+    }
+
+    //
+    if (!isAudio) {
+        d.format = frame->format;
     }
 
     // 拷贝解码后的数据

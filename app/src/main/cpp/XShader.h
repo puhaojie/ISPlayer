@@ -5,12 +5,18 @@
 #ifndef ISPLAYER_XSHADER_H
 #define ISPLAYER_XSHADER_H
 
+#include <mutex>
 
+enum XShaderType {
+    XSHADER_YUV420P =0,// Y 4 U 1 V 1
+    XSHADER_NV12 = 25, // Y 4 UV 1
+    XSHADER_NV21 = 26  // Y 4 VU 1
+};
 // 材质的绘制
 class XShader {
 public:
     // 初始化
-    virtual bool Init();
+    virtual bool Init(XShaderType type = XSHADER_YUV420P);
 
     /**
      * 获取材质 并映射到内存
@@ -30,6 +36,8 @@ protected:
     unsigned int texts[100] = {0}; //材质
     // 渲染
     unsigned int program = 0;
+    //
+    std::mutex mux;
 };
 
 

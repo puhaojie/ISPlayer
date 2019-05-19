@@ -16,6 +16,17 @@
 
 IVideoView *view;
 
+
+
+extern "C"
+JNIEXPORT jint
+JNI_OnLoad(JavaVM *vm,void* res){
+
+    FFDecode::InitHard(vm);
+    return JNI_VERSION_1_4;
+}
+
+
 extern "C"
 JNIEXPORT jstring
 JNICALL
@@ -28,7 +39,7 @@ Java_com_phj_player_MainActivity_stringFromJNI(
     de->Open("/sdcard/5.mp4");
 
     IDecode *vdecode = new FFDecode();
-    vdecode->Open(de->GetVPara());
+    vdecode->Open(de->GetVPara(), true);
 
     IDecode *adecode = new FFDecode();
     adecode->Open(de->GetAPara());

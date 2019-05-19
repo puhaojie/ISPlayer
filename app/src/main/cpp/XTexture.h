@@ -19,7 +19,7 @@ public:
     // void* 方式可以存放任何格式的对象 相当于java中的object
 
     // 初始化（XEGL和XShader）
-    virtual bool Init(void *win) = 0;
+    virtual bool Init(void *win,XTextureType type = XTEXTURE_YUV420P) = 0;
 
     static XTexture* Create();
 
