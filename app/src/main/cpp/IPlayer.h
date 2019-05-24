@@ -40,7 +40,7 @@ public:
     IAudioPlay *audioPlay = 0;
 protected:
     // 用作音视频同步 (采用视频同步音频)
-    void Main(){};
+    void Main();
     std::mutex mux;
     IPlayer(){};
 };

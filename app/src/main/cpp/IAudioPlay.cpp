@@ -42,7 +42,7 @@ XData IAudioPlay::GetData()
         framesMutex.lock();
         if(!frames.empty())
         {
-            LOGE("GetData %d",frames.size());
+//            LOGE("GetData %d",frames.size());
             d = frames.front();
             frames.pop_front();
             framesMutex.unlock();

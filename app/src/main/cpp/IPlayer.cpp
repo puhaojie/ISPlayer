@@ -77,7 +77,8 @@ bool IPlayer::Start() {
         mux.unlock();
         return false;
     }
-
+    // 启动主线程
+    XThread::Start();
     mux.unlock();
     return true;
 }
@@ -86,6 +87,28 @@ void IPlayer::InitView(void *win) {
     if(videoView)
     {
         videoView->SetRender(win);
+    }
+}
+
+/**
+ * 通过pts来显示
+ */
+void IPlayer::Main() {
+    LOGE("IPlayer::Main()");
+    while (!isExit) {
+        mux.lock();
+
+        if (!audioPlay|| !vdecode) {
+            XSleep(2);
+            mux.unlock();
+            continue;
+        }
+        int apts = audioPlay->pts;
+
+        vdecode->playPts = apts;
+        //
+
+        mux.unlock();
     }
 }
 

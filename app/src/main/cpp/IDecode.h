@@ -36,6 +36,10 @@ public:
     // 是否是音频，解码的时候会过滤
     bool isAudio = false;
 
+    // 当前音频播放的时间
+    int playPts;
+    // 播放渲染的显示时间
+    int pts;
 protected:
     // 解码的线程的入口
     virtual void Main();

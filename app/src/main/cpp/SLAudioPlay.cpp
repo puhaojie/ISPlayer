@@ -57,6 +57,7 @@ void SLAudioPlay::PlayCall(void *bufq)
         return;
     }
     memcpy(buf,d.data,d.size);
+    pts = d.pts;
     mux.lock();
     if (pcmQue && (*pcmQue))
         (*pcmQue)->Enqueue(bf,buf,d.size);

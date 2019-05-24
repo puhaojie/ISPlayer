@@ -4,11 +4,19 @@
 
 #include "FFDemux.h"
 #include "XLog.h"
-
 // 因为FFmpeg是用C写入的所以需要加入extern "C"
 extern "C" {
 #include "libavformat/avformat.h"
 }
+
+
+//分数转为浮点数
+static double r2d(AVRational r)
+{
+    return r.num == 0 || r.den == 0 ?0.:(double) r.num/(double)r.den;
+}
+
+
 
 bool FFDemux::Open(const char *const url) {
 
@@ -70,6 +78,10 @@ XData FFDemux::Read() {
         av_packet_free(&packet);
         return XData();
     }
+    //转换pts
+    packet->pts = (int64_t) (packet->pts * (1000 * r2d(ic->streams[packet->stream_index]->time_base)));
+    packet->dts = (int64_t) (packet->dts * (1000 * r2d(ic->streams[packet->stream_index]->time_base)));
+    data.pts = (int)packet->pts;
     return data;
 }
 

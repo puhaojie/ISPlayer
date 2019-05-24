@@ -16,6 +16,15 @@ void IDecode::Main() {
             continue;
         }
 
+        // 判断音视频同步
+        if (!isAudio && playPts > 0){
+            if (playPts < pts){ //同步的pts小于当前的pts
+                packsMutex.unlock();
+
+                XSleep(1);
+                continue;
+            }
+        }
         XData pack = packs.front();
         packs.pop_front();
 
@@ -26,6 +35,7 @@ void IDecode::Main() {
                 XData frame = RecvFrame();
                 if (!frame.data) //读不到数据的时候 返回
                     break;
+                pts = frame.pts;
 //                LOGE(" 大小 %d",frame.size);
                 this->Notify(frame);
             }
