@@ -136,13 +136,21 @@ XData FFDecode::RecvFrame() {
 void FFDecode::Close() {
 
     mux.lock();
-    pts = 0;
-    playPts = 0;
+//    pts = 0;
+//    playPts = 0;
     if(frame)
         av_frame_free(&frame);
     if (codec) {
         avcodec_close(codec);
         avcodec_free_context(&codec);
     }
+    mux.unlock();
+}
+
+void FFDecode::Clear() {
+    IDecode::Clear();
+    mux.lock();
+    if(codec)
+        avcodec_flush_buffers(codec);
     mux.unlock();
 }

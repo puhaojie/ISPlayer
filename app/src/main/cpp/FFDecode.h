@@ -24,6 +24,8 @@ public:
 
     virtual void Close();
 
+    virtual void Clear();
+
     // 将观察者update过来的数据，进行入队。
     // 出队的main中 作为消费 此为消费方法
     virtual bool SendPacket(XData data);

@@ -67,3 +67,15 @@ void IDecode::Update(XData data) {
         XSleep(1);
     }
 }
+
+void IDecode::Clear() {
+    packsMutex.lock();
+    while(!packs.empty())
+    {
+        packs.front().Drop();
+        packs.pop_front();
+    }
+    playPts = 0;
+    pts = 0;
+    packsMutex.unlock();
+}

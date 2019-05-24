@@ -30,6 +30,8 @@ public:
     // 开始播放
     virtual bool Start();
 
+    virtual void Close();
+
 
     virtual void InitView(void *win);
 
