@@ -114,9 +114,12 @@ static GLuint InitShader(const char *code,GLint type)
 // 初始化Shader
 bool XShader::Init(XShaderType type) {
 
+    Close();
+    mux.lock();
     // 初始化顶点和片元Shader
     vsh = InitShader(vertexShader,GL_VERTEX_SHADER);
     if (vsh == 0) {
+        mux.unlock();
         return false;
     }
 
@@ -135,10 +138,12 @@ bool XShader::Init(XShaderType type) {
             break;
         default:
         {
+            mux.unlock();
             return false;
         }
     }
     if (fsh == 0) {
+        mux.unlock();
         return false;
     }
 
@@ -146,6 +151,7 @@ bool XShader::Init(XShaderType type) {
     program = glCreateProgram();
     if(program == 0)
     {
+        mux.unlock();
         return false;
     }
     //渲染程序中加入着色器代码
@@ -158,6 +164,7 @@ bool XShader::Init(XShaderType type) {
     glGetProgramiv(program,GL_LINK_STATUS,&status);
     if(status != GL_TRUE)
     {
+        mux.unlock();
         return false;
     }
     glUseProgram(program);
@@ -198,10 +205,34 @@ bool XShader::Init(XShaderType type) {
             glUniform1i( glGetUniformLocation(program,"uvTexture"),1); //对于纹理第2层
             break;
     }
-
+    mux.unlock();
     LOGI("初始化Shader成功！");
 
     return true;
+}
+
+
+void XShader::Close() {
+    mux.lock();
+    //释放shader
+    if(program)
+        glDeleteProgram(program);
+    if(fsh)
+        glDeleteShader(fsh);
+    if(vsh)
+        glDeleteShader(vsh);
+
+    //释放材质
+    for(int i = 0; i < sizeof(texts)/sizeof(unsigned int); i++)
+    {
+        if(texts[i])
+        {
+            glDeleteTextures(1,&texts[i]);
+        }
+        texts[i] = 0;
+    }
+
+    mux.unlock();
 }
 
 
@@ -212,7 +243,7 @@ void XShader::GetTexture(unsigned int index, int width, int height, unsigned cha
     if (isa){
         format = GL_LUMINANCE_ALPHA;
     }
-
+    mux.lock();
     // 材质是否初始化过
     if(texts[index] == 0)
     {
@@ -242,9 +273,17 @@ void XShader::GetTexture(unsigned int index, int width, int height, unsigned cha
     glBindTexture(GL_TEXTURE_2D,texts[index]);
     //替换纹理内容
     glTexSubImage2D(GL_TEXTURE_2D,0,0,0,width,height,format,GL_UNSIGNED_BYTE,buf);
+    mux.unlock();
 }
 
 void XShader::Draw() {
+    mux.lock();
+    if(!program)
+    {
+        mux.unlock();
+        return;
+    }
     //三维绘制
     glDrawArrays(GL_TRIANGLE_STRIP,0,4);
+    mux.unlock();
 }

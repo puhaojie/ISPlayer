@@ -19,7 +19,9 @@ public:
     // 绘制每一帧图像
     virtual void Render(XData data);
 
+    virtual void Close();
 protected:
+    std::mutex mux; //互斥变量
     void * view = 0; // 窗体
     XTexture *txt = 0;
 };

@@ -25,3 +25,14 @@ void GLVideoView::Render(XData data) {
     // 每一帧都在这里面渲染
     txt->Draw(data.datas,data.width,data.height);
 }
+
+void GLVideoView::Close() {
+    mux.lock();
+    if(txt)
+    {
+        txt->Drop();
+        txt = 0;
+    }
+
+    mux.unlock();
+}

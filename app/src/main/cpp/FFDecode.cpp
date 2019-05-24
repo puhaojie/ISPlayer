@@ -15,7 +15,7 @@ void FFDecode::InitHard(void *vm) {
 }
 
 bool FFDecode::Open(XParameter para, bool isHard) {
-
+    Close();
     if (!para.para) return false;
     AVCodecParameters *p = para.para;
 
@@ -68,15 +68,17 @@ bool FFDecode::Open(XParameter para, bool isHard) {
 }
 
 bool FFDecode::SendPacket(XData pkt) {
-
+    mux.lock();
     // 解码器为空或者数据源为空
     if (!codec || pkt.size <= 0 || !pkt.data)
     {
+        mux.unlock();
         return false;
     }
 
 
     int re = avcodec_send_packet(codec, (const AVPacket *) pkt.data);
+    mux.unlock();
     if (re != 0)
     {
         LOGE("avcodec_send_packet failed");
@@ -88,8 +90,10 @@ bool FFDecode::SendPacket(XData pkt) {
 
 XData FFDecode::RecvFrame() {
 
+    mux.lock();
     if (!codec)
     {
+        mux.unlock();
         return XData();
     }
 
@@ -101,6 +105,7 @@ XData FFDecode::RecvFrame() {
     int re = avcodec_receive_frame(codec,frame);
     if (re != 0)
     {
+        mux.unlock();
         return XData();
     }
 
@@ -115,7 +120,7 @@ XData FFDecode::RecvFrame() {
     } else {
         d.size = av_get_bytes_per_sample((AVSampleFormat) frame->format) * frame->nb_samples * 2; //样本字节数*单通道样本数*通道数
     }
-
+    mux.unlock();
     //
     if (!isAudio) {
         d.format = frame->format;
@@ -126,4 +131,18 @@ XData FFDecode::RecvFrame() {
     // 拷贝解码后的数据
     memcpy(d.datas,frame->data, sizeof(d.datas));
     return d;
+}
+
+void FFDecode::Close() {
+
+    mux.lock();
+    pts = 0;
+    playPts = 0;
+    if(frame)
+        av_frame_free(&frame);
+    if (codec) {
+        avcodec_close(codec);
+        avcodec_free_context(&codec);
+    }
+    mux.unlock();
 }

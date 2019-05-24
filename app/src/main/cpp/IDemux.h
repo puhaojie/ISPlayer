@@ -25,6 +25,8 @@ public:
     // 打开相应的流媒体
     virtual bool Open(const char* const url) = 0;
 
+    virtual void Close() = 0;
+
     // 解封装后的一帧数据，内存由调用者清理
     virtual XData Read() = 0;
 

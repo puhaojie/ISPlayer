@@ -20,8 +20,12 @@ static double r2d(AVRational r)
 
 bool FFDemux::Open(const char *const url) {
 
+    Close();
+    mux.lock();
+
     int re = avformat_open_input(&ic, url, 0, 0);
     if (re != 0) {
+        mux.unlock();
         char buf[1024] = {0};
         av_strerror(re, buf, sizeof(buf));
         LOGE("open file %s failed, reason %s ", url, buf);
@@ -31,6 +35,7 @@ bool FFDemux::Open(const char *const url) {
     // 读取文件信息
     re = avformat_find_stream_info(ic, 0);
     if (re != 0) {
+        mux.unlock();
         char buf[1024] = {0};
         av_strerror(re, buf, sizeof(buf));
         LOGE("avformat_find_stream_info %s failed, reason %s ", url, buf);
@@ -40,16 +45,17 @@ bool FFDemux::Open(const char *const url) {
     // 尝试获取时间长度
     totalMs = (int) ic->duration / (AV_TIME_BASE / 1000);
     LOGI("totalMs %d", totalMs);
-
+    mux.unlock();
     // 获取音视频的相关信息
     return true;
 }
 
 
 XData FFDemux::Read() {
-
+    mux.lock();
     if (!ic)
     {
+        mux.unlock();
         return XData();
     }
 
@@ -57,6 +63,7 @@ XData FFDemux::Read() {
     AVPacket *packet = av_packet_alloc();
     int re = av_read_frame(ic,packet);
     if (re != 0) {
+        mux.unlock();
         // 释放空间
         av_packet_free(&packet);
         return XData();
@@ -82,6 +89,7 @@ XData FFDemux::Read() {
     packet->pts = (int64_t) (packet->pts * (1000 * r2d(ic->streams[packet->stream_index]->time_base)));
     packet->dts = (int64_t) (packet->dts * (1000 * r2d(ic->streams[packet->stream_index]->time_base)));
     data.pts = (int)packet->pts;
+    mux.unlock();
     return data;
 }
 
@@ -146,5 +154,16 @@ XParameter FFDemux::GetAPara() {
     para.channels = ic->streams[re]->codecpar->channels;
     mux.unlock();
     return para;
+}
+
+/**
+ * 关闭清理资源
+ */
+void FFDemux::Close() {
+    mux.lock();
+    if (ic){
+        avformat_close_input(&ic);
+    }
+    mux.unlock();
 }
 

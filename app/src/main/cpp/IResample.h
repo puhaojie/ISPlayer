@@ -20,6 +20,8 @@ public:
      */
     virtual bool Open(XParameter in,XParameter out = XParameter()) = 0;
 
+    virtual void Close() = 0;
+
     // 重采样
     virtual XData Resample(XData indata) = 0; // 重采样出来的数据
 

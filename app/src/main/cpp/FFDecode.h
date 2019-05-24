@@ -22,6 +22,8 @@ public:
     // 打开解码器
     virtual bool Open(XParameter parameter,bool isHard);
 
+    virtual void Close();
+
     // 将观察者update过来的数据，进行入队。
     // 出队的main中 作为消费 此为消费方法
     virtual bool SendPacket(XData data);
@@ -30,6 +32,7 @@ public:
     virtual XData RecvFrame();
 
 protected:
+    // codec的锁
     std::mutex mux;
     // 解码器
     AVCodecContext *codec  = 0;

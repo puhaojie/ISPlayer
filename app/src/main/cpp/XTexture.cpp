@@ -14,24 +14,40 @@ public:
     // GetTexture时候使用
     XTextureType type;
 
-    virtual bool Init(void *win, XTextureType type) {
 
+    virtual void Drop()
+    {
+        mux.lock();
+        XEGL::Get()->Close();
+        sh.Close();
+        mux.unlock();
+        delete this;
+    }
+
+
+    virtual bool Init(void *win, XTextureType type) {
+        XEGL::Get()->Close();
+        mux.lock();
         this->type = type;
         if (!win) {
+            mux.unlock();
             return false;
         }
 
         if (!XEGL::Get()->Init(win)) {
+            mux.unlock();
             return false;
         }
 
         sh.Init((XShaderType) type);
+        mux.unlock();
 
         return true;
     }
 
 
     virtual void Draw(unsigned char *data[], int width, int height) {
+        mux.lock();
         sh.GetTexture(0, width, height, data[0]); // y
 
         if (type == XTEXTURE_YUV420P) {
@@ -45,6 +61,7 @@ public:
         sh.Draw();
 
         XEGL::Get()->Draw();
+        mux.unlock();
     }
 
 };

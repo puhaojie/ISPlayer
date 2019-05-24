@@ -6,6 +6,8 @@
 #define ISPLAYER_XEGL_H
 
 
+#include <mutex>
+
 class XEGL
 {
 public:
@@ -19,6 +21,7 @@ public:
 protected:
     // 构造方法不对外开放
     XEGL(){}
+    std::mutex mux;
 };
 
 

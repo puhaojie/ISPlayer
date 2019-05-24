@@ -15,6 +15,8 @@ public:
     // 打开相应的流媒体
     virtual bool Open(const char* const url);
 
+    virtual void Close();
+
     // 解封装后的一帧数据，内存由调用者清理
     virtual XData Read();
 
@@ -31,6 +33,7 @@ private:
     AVFormatContext *ic = 0;
 
     // todo IObserver中也有 冲突？
+    // Open 与 Read会访问ic
     std::mutex mux;
 
     // 对应的索引

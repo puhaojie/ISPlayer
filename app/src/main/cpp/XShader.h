@@ -18,6 +18,7 @@ public:
     // 初始化
     virtual bool Init(XShaderType type = XSHADER_YUV420P);
 
+    virtual void Close();
     /**
      * 获取材质 并映射到内存
      * @param index 层级第几层数据

@@ -22,17 +22,19 @@ public:
     virtual bool Init(void *win) {
         ANativeWindow *nwin = (ANativeWindow *) win;
 
-
+        mux.lock();
         // 1、获取EGLDisplay对象 显示设备
         display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
         if (display == EGL_NO_DISPLAY)
         {
+            mux.unlock();
             return false;
         }
 
         // 2、初始化display对象
         int re = eglInitialize(display,0,0);
         if (re != EGL_TRUE) {
+            mux.unlock();
             return false;
         }
 
@@ -52,6 +54,7 @@ public:
         EGLint numConfigs = 0;
         re = eglChooseConfig(display,configSpec,&config,1,&numConfigs);
         if (re != EGL_TRUE) {
+            mux.unlock();
             return false;
         }
         // 外部的窗口和OpenGL关联
@@ -61,25 +64,49 @@ public:
         const EGLint ctxAttr[] = {EGL_CONTEXT_CLIENT_VERSION, 2, EGL_NONE};
         context = eglCreateContext(display, config, EGL_NO_CONTEXT, ctxAttr);
         if (context == EGL_NO_CONTEXT) {
+            mux.unlock();
             return false;
         }
         if (EGL_TRUE != eglMakeCurrent(display, surface, surface, context)) {
+            mux.unlock();
             return false;
         }
+        mux.unlock();
         LOGI("CXEGL Init success");
         return true;
     }
 
     virtual void Draw() {
+        mux.lock();
         if(display == EGL_NO_DISPLAY || surface == EGL_NO_SURFACE)
         {
+            mux.unlock();
             return;
         }
+        mux.unlock();
         eglSwapBuffers(display,surface);
     }
 
     virtual void Close() {
+        mux.lock();
+        if(display == EGL_NO_DISPLAY)
+        {
+            mux.unlock();
+            return;
+        }
+        eglMakeCurrent(display,EGL_NO_SURFACE,EGL_NO_SURFACE,EGL_NO_CONTEXT);
 
+        if(surface != EGL_NO_SURFACE)
+            eglDestroySurface(display,surface);
+        if(context != EGL_NO_CONTEXT)
+            eglDestroyContext(display,context);
+
+        eglTerminate(display);
+
+        display = EGL_NO_DISPLAY;
+        surface = EGL_NO_SURFACE;
+        context = EGL_NO_CONTEXT;
+        mux.unlock();
     }
 };
 
