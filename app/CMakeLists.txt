@@ -70,6 +70,13 @@ add_library( # Sets the name of the library.
              src/main/cpp/IAudioPlay.cpp
              src/main/cpp/SLAudioPlay.cpp
 
+             # 播放的对外接口
+             src/main/cpp/IPlayer.cpp
+             src/main/cpp/IPlayerProxy.cpp
+
+             # 构建者模式构建播放器引擎
+             src/main/cpp/IPlayerBuilder.cpp
+             src/main/cpp/FFPlayerBuilder.cpp
              )
 
 # Searches for a specified prebuilt library and stores the path as a

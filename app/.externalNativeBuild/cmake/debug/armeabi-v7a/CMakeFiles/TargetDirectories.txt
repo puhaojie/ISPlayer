@@ -1,3 +1,0 @@
-D:/F/project/self/github/android/ISPlayer/app/.externalNativeBuild/cmake/debug/armeabi-v7a/CMakeFiles/native-lib.dir
-D:/F/project/self/github/android/ISPlayer/app/.externalNativeBuild/cmake/debug/armeabi-v7a/CMakeFiles/edit_cache.dir
-D:/F/project/self/github/android/ISPlayer/app/.externalNativeBuild/cmake/debug/armeabi-v7a/CMakeFiles/rebuild_cache.dir

@@ -12,7 +12,6 @@ import javax.microedition.khronos.opengles.GL10;
  * 渲染区域
  * Created by phj on 2019/5/3.
  */
-
 public class ISPlay extends GLSurfaceView implements SurfaceHolder.Callback,GLSurfaceView.Renderer {
 
     public ISPlay(Context context, AttributeSet attrs) {
@@ -24,6 +23,7 @@ public class ISPlay extends GLSurfaceView implements SurfaceHolder.Callback,GLSu
     @Override
     public void surfaceCreated(SurfaceHolder var1){
         initView(var1.getSurface());
+        playOrPause();
     }
 
     @Override

@@ -12,7 +12,7 @@ class XThread {
 
 public:
     // 启动线程（外部进入的方法） 代表线程读取工作的启动
-    virtual void Start();
+    virtual bool Start();
 
     // 安全停止
     virtual void Stop();
