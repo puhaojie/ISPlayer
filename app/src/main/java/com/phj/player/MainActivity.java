@@ -40,13 +40,15 @@ public class MainActivity extends AppCompatActivity implements Runnable, SeekBar
         Button bt = (Button) findViewById(R.id.open_button);
         seek = (SeekBar) findViewById(R.id.aplayseek);
         mISPlay = (ISPlay) findViewById(R.id.isplay);
-        seek.setMax(1000);
-        seek.setOnSeekBarChangeListener(this);
+
 
         bt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mISPlay.open("/sdcard/5.mp4");
+                Log.e(TAG, "getTotalTime="+mISPlay.getTotalTime());
+                seek.setMax((int) mISPlay.getTotalTime());
+                seek.setOnSeekBarChangeListener(MainActivity.this);
             }
         });
 
@@ -71,8 +73,8 @@ public class MainActivity extends AppCompatActivity implements Runnable, SeekBar
     public void run() {
         for(;;)
         {
-            seek.setProgress((int)(mISPlay.playPos()*1000));
-            Log.e(TAG, Thread.currentThread()+"run: isPlaying = "+mISPlay.isPlaying() );
+            seek.setProgress((int)(mISPlay.playPos()*mISPlay.getTotalTime()));
+//            Log.e(TAG, Thread.currentThread()+"run: isPlaying = "+mISPlay.isPlaying() );
             try {
                 Thread.sleep( 1000 );
             } catch (InterruptedException e) {
@@ -93,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements Runnable, SeekBar
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
-        mISPlay.seek( (double)seekBar.getProgress()/(double)seekBar.getMax() );
+        mISPlay.seek(seekBar.getProgress());
     }
 
 }

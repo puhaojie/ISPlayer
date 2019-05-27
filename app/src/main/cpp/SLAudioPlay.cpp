@@ -63,7 +63,6 @@ void SLAudioPlay::PlayCall(void *bufq)
         (*pcmQue)->Enqueue(bf,buf,d.size);
     mux.unlock();
     d.Drop();
-
 }
 
 static void PcmCall(SLAndroidSimpleBufferQueueItf bf,void *contex)

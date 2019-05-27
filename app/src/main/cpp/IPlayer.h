@@ -8,6 +8,7 @@
 
 #include <mutex>
 #include "XThread.h"
+#include "XParameter.h"
 
 
 class IDemux;
@@ -46,8 +47,15 @@ public:
     // 是否正在播放
     virtual bool IsPlaying();
 
+    // 是否正在播放
+    virtual long GetTotalTime();
+
     //
-    virtual bool Seek(double pos);
+    virtual bool Seek(long pos);
+
+    XParameter outParameter;
+    //是否视频硬解码
+    bool isHardDecode = true;
 
     IDemux* demux = 0;
     IDecode *vdecode = 0;

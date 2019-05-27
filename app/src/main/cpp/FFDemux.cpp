@@ -167,12 +167,13 @@ void FFDemux::Close() {
     mux.unlock();
 }
 
-bool FFDemux::Seek(double pos) {
-    if(pos<0 || pos > 1)
+bool FFDemux::Seek(long pos) {
+    if(pos<0 || pos >= totalMs)
     {
         LOGE("Seek value must 0.0~1.0");
         return false;
     }
+    LOGE("Seek value seek to %d",(int)pos);
     bool re;
     mux.lock();
     if(!ic)
@@ -183,8 +184,10 @@ bool FFDemux::Seek(double pos) {
     //清理读取的缓冲
     avformat_flush(ic);
     long long seekPts = 0;
-    seekPts = ic->streams[videoStream]->duration*pos;
-
+    double d = ((double)pos/totalMs);
+    LOGE("Seek value seek to %f",d);
+    seekPts = ic->streams[videoStream]->duration*d;
+    LOGE("Seek value seek to %d",(int)seekPts);
     //往后跳转到关键帧
     re = av_seek_frame(ic,videoStream,seekPts,AVSEEK_FLAG_FRAME|AVSEEK_FLAG_BACKWARD);
     mux.unlock();

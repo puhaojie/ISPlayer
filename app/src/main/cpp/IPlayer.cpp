@@ -29,7 +29,7 @@ bool IPlayer::Open(const char* const path) {
     }
 
     //解码 解码可能不需要，如果是解封之后就是原始数据
-    if(!vdecode || !vdecode->Open(demux->GetVPara()))
+    if(!vdecode || !vdecode->Open(demux->GetVPara(),isHardDecode))
     {
         LOGE("vdecode->Open %s failed!",path);
     }
@@ -39,8 +39,8 @@ bool IPlayer::Open(const char* const path) {
     }
 
     //重采样 有可能不需要，解码后或者解封后可能是直接能播放的数据
-//    if(outPara.sample_rate <= 0)
-    if(!resample || !resample->Open(demux->GetAPara(),demux->GetAPara()))
+    outParameter = demux->GetAPara();
+    if(!resample || !resample->Open(demux->GetAPara(),outParameter))
     {
         LOGE("resample->Open %s failed!",path);
     }
@@ -55,7 +55,7 @@ bool IPlayer::Start() {
 
 
     //解码 解码可能不需要，如果是解封之后就是原始数据
-    if(!audioPlay || !audioPlay->StartPlay(demux->GetAPara()))
+    if(!audioPlay || !audioPlay->StartPlay(outParameter))
     {
         mux.unlock();
         return false;
@@ -87,6 +87,7 @@ bool IPlayer::Start() {
 void IPlayer::InitView(void *win) {
     if(videoView)
     {
+        videoView->Close();
         videoView->SetRender(win);
     }
 }
@@ -190,13 +191,13 @@ void IPlayer::SetPause(bool isPause) {
     mux.unlock();
 }
 
-bool IPlayer::Seek(double pos) {
+bool IPlayer::Seek(long pos) {
     bool re;
     if(!demux) {
         return false;
     }
 
-    if (pos < 0 || pos > 1) {
+    if (pos < 0) {
         return false;
     }
 
@@ -221,15 +222,17 @@ bool IPlayer::Seek(double pos) {
         return re;
     }
     //解码到实际需要显示的帧
-    int seekPts = pos*demux->totalMs;
+//    int seekPts = pos*demux->totalMs;
     while(!isExit)
     {
         XData pkt = demux->Read();
+
         if(pkt.size<=0)break;
         if(pkt.isAudio)
         {
-            if(pkt.pts < seekPts)
+            if(pkt.pts < pos)
             {
+                LOGE("跳到的关键帧是=%d,当前的帧是=%d",(int)pos,pkt.pts);
                 pkt.Drop();
                 continue;
             }
@@ -246,7 +249,7 @@ bool IPlayer::Seek(double pos) {
         {
             continue;
         }
-        if(data.pts >= seekPts)
+        if(data.pts >= pos)
         {
             //vdecode->Notify(data);
             break;
@@ -257,6 +260,16 @@ bool IPlayer::Seek(double pos) {
     SetPause(false);
     return re;
 
+}
+
+long IPlayer::GetTotalTime() {
+    long re = 0L;
+    mux.lock();
+    if(demux) {
+        re = demux->totalMs;
+    }
+    mux.unlock();
+    return re;
 }
 
 

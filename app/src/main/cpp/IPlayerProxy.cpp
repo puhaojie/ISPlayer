@@ -22,6 +22,7 @@ bool IPlayerProxy::Open(const char *path) {
     mux.lock();
     bool re = false;
     if (iPlayer) {
+        iPlayer->isHardDecode = isHardDecode;
         re = iPlayer->Open(path);
     }
     mux.unlock();
@@ -102,12 +103,23 @@ bool IPlayerProxy::IsPause() {
     return re;
 }
 
-bool IPlayerProxy::Seek(double pos) {
+bool IPlayerProxy::Seek(long pos) {
     bool re = false;
     mux.lock();
     if(iPlayer)
     {
         re = iPlayer->Seek(pos);
+    }
+    mux.unlock();
+    return re;
+}
+
+long IPlayerProxy::GetTotalTime() {
+    long re = 0;
+    mux.lock();
+    if(iPlayer)
+    {
+        re = iPlayer->GetTotalTime();
     }
     mux.unlock();
     return re;

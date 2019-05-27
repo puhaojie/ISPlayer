@@ -18,7 +18,7 @@ public:
     virtual void Close();
 
     //seek 位置 pos 0.0~1.0
-    virtual bool Seek(double pos);
+    virtual bool Seek(long pos);
 
     // 解封装后的一帧数据，内存由调用者清理
     virtual XData Read();

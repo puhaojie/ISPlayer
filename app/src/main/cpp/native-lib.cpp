@@ -67,7 +67,7 @@ Java_com_phj_player_ISPlay_open(JNIEnv *env, jobject instance, jstring path) {
 // 拖拽
 extern "C"
 JNIEXPORT void JNICALL
-Java_com_phj_player_ISPlay_seek(JNIEnv *env, jobject instance, jdouble pos) {
+Java_com_phj_player_ISPlay_seek(JNIEnv *env, jobject instance, jlong pos) {
     IPlayerProxy::Get()->Seek(pos);
 }
 
@@ -77,4 +77,14 @@ JNIEXPORT jboolean JNICALL
 Java_com_phj_player_ISPlay_isPlaying(JNIEnv *env, jobject instance) {
     bool re = IPlayerProxy::Get()->IsPlaying();
     return (jboolean) re;
+}
+
+
+extern "C"
+JNIEXPORT jlong JNICALL
+Java_com_phj_player_ISPlay_getTotalTime(JNIEnv *env, jobject instance) {
+
+
+    return IPlayerProxy::Get()->GetTotalTime();
+
 }

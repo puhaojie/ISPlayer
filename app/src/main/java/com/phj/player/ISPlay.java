@@ -61,9 +61,12 @@ public class ISPlay extends GLSurfaceView implements SurfaceHolder.Callback,GLSu
     // 当前播放的时间
     public native double playPos();
 
+    // 得到播放器的时间
+    public native long getTotalTime();
+
     public native void playOrPause();
 
-    public native void seek(double pos);
+    public native void seek(long pos);
 
     // 是否正在播放
     public native boolean isPlaying();

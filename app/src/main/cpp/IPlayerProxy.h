@@ -35,7 +35,10 @@ public:
 
     virtual bool IsPlaying();
 
-    virtual bool Seek(double pos);
+    // 是否正在播放
+    virtual long GetTotalTime();
+
+    virtual bool Seek(long pos);
 
     virtual bool IsPause();
 
