@@ -9,6 +9,10 @@
 void IDecode::Main() {
 
     while (!isExit){
+        if (IsPause()){
+            XSleep(2);
+            continue;
+        }
         packsMutex.lock();
         if (packs.empty()) {
             packsMutex.unlock();

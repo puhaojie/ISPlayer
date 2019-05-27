@@ -45,3 +45,13 @@ void XThread::Stop() {
     }
     LOGI("停止线程超时");
 }
+
+void XThread::SetPause(bool isP) {
+    isPause = isP;
+    for (int i = 0; i < 10; ++i) {
+        if (isP == isPausing) {
+            break;
+        }
+        XSleep(10);
+    }
+}

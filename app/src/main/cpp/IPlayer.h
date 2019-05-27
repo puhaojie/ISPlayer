@@ -31,9 +31,24 @@ public:
     // 开始播放
     virtual bool Start();
 
+    // 设置是否暂停
+    virtual void SetPause(bool isPause);
+
+    // 清理资源
     virtual void Close();
 
+    // 初始化窗口
     virtual void InitView(void *win);
+
+    // 播放的时间
+    virtual double PlayPos();
+
+    // 是否正在播放
+    virtual bool IsPlaying();
+
+    //
+    virtual bool Seek(double pos);
+
     IDemux* demux = 0;
     IDecode *vdecode = 0;
     IDecode *adecode = 0;

@@ -23,7 +23,6 @@ public class ISPlay extends GLSurfaceView implements SurfaceHolder.Callback,GLSu
     @Override
     public void surfaceCreated(SurfaceHolder var1){
         initView(var1.getSurface());
-        playOrPause();
     }
 
     @Override
@@ -36,7 +35,7 @@ public class ISPlay extends GLSurfaceView implements SurfaceHolder.Callback,GLSu
 
     }
 
-    public native void initView(Object surface);
+
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
@@ -53,5 +52,20 @@ public class ISPlay extends GLSurfaceView implements SurfaceHolder.Callback,GLSu
 
     }
 
+    // 设置窗体
+    public native void initView(Object surface);
+
+    // "/sdcard/5.mp4"
+    public native boolean open(String path);
+
+    // 当前播放的时间
+    public native double playPos();
+
     public native void playOrPause();
+
+    public native void seek(double pos);
+
+    // 是否正在播放
+    public native boolean isPlaying();
+
 }

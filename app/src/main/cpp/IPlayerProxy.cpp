@@ -57,3 +57,59 @@ void IPlayerProxy::Close() {
     }
     mux.unlock();
 }
+
+// 当前时间
+double IPlayerProxy::PlayPos() {
+    double pos = 0.0;
+    mux.lock();
+    if(iPlayer)
+    {
+        pos = iPlayer->PlayPos();
+    }
+    mux.unlock();
+    return pos;
+}
+
+bool IPlayerProxy::IsPlaying() {
+    bool re = false;
+    mux.lock();
+    if(iPlayer)
+    {
+        re = iPlayer->IsPlaying();
+    }
+    mux.unlock();
+    return re;
+}
+
+
+void IPlayerProxy::SetPause(bool isB) {
+
+    if(iPlayer)
+    {
+        iPlayer->SetPause(isB);
+    }
+    mux.unlock();
+}
+
+bool IPlayerProxy::IsPause() {
+    bool re = false;
+    mux.lock();
+    if(iPlayer)
+    {
+        re = iPlayer->IsPause();
+    }
+    mux.unlock();
+    return re;
+}
+
+bool IPlayerProxy::Seek(double pos) {
+    bool re = false;
+    mux.lock();
+    if(iPlayer)
+    {
+        re = iPlayer->Seek(pos);
+    }
+    mux.unlock();
+    return re;
+}
+

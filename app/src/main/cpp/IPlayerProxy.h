@@ -5,6 +5,7 @@
 #ifndef ISPLAYER_IPLAYERPROXY_H
 #define ISPLAYER_IPLAYERPROXY_H
 
+#include <jni.h>
 #include "IPlayer.h"
 
 /**
@@ -32,8 +33,18 @@ public:
 
     virtual void Close();
 
+    virtual bool IsPlaying();
+
+    virtual bool Seek(double pos);
+
+    virtual bool IsPause();
+
+    virtual void SetPause(bool isB);
+
 
     virtual void InitView(void *win);
+
+    virtual double PlayPos();
 
 protected:
     IPlayer *iPlayer = 0;

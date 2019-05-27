@@ -14,6 +14,16 @@ public:
     // 启动线程（外部进入的方法） 代表线程读取工作的启动
     virtual bool Start();
 
+    // 设置暂停还是播放
+    virtual void SetPause(bool isP);
+
+    // 判断是否暂停
+    virtual bool IsPause()
+    {
+        isPausing = isPause;
+        return isPause;
+    }
+
     // 安全停止
     virtual void Stop();
 
